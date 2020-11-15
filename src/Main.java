@@ -80,12 +80,15 @@ public class Main extends JFrame {
 		projectMenu.setPreferredSize(new Dimension(100, 40));
 		
 		JMenuItem newItem = new JMenuItem("New");
+		newItem.addActionListener(reporter.newItemListener());
 		projectMenu.add(newItem);
 		
 		JMenuItem runItem = new JMenuItem("Run");
+		runItem.addActionListener(reporter.runItemListener());
 		projectMenu.add(runItem);
 		
 		JMenuItem stopItem = new JMenuItem("Stop");
+		stopItem.addActionListener(reporter.stopItemListener());
 		projectMenu.add(stopItem);
 		
 		JMenu aboutMenu = new JMenu("About");

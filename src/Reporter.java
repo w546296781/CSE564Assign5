@@ -14,7 +14,7 @@ public class Reporter implements MouseListener{
 		// TODO Auto-generated method stub
 		int x = e.getX();
 		int y = e.getY();
-		System.out.println("x=" + x + "y=" + y);
+		Repository.getInstance().addPoint(x, y);
 	}
 
 	@Override
@@ -68,25 +68,25 @@ public class Reporter implements MouseListener{
 	public ActionListener newItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Repository.getInstance().clearData();
 			}
 		};
 	}
 		
-		public ActionListener runItemListener() {
-			return new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					
-				}
-			};
-		}
-			
-			public ActionListener stopItemListener() {
-				return new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						
-					}
-				};
+	public ActionListener runItemListener() {
+		return new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
 			}
+		};
+	}
+			
+	public ActionListener stopItemListener() {
+		return new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+						
+			}
+		};
+	}
 
 }

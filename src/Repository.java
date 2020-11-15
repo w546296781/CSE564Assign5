@@ -1,8 +1,15 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 public class Repository extends Observable{
 	
 	private static Repository instance; 
+	private List<int[]> data;
+	
+	public Repository() {
+		data = new ArrayList<int[]>();
+	}
 	
     public static Repository getInstance(){  
     	if (instance == null) {  
@@ -14,5 +21,19 @@ public class Repository extends Observable{
 	public void notifyCanvas() {
 		setChanged();
 		notifyObservers();
+	}
+	
+	public List<int[]> getData(){
+		return data;
+	}
+	
+	public void addPoint(int x, int y) {
+		data.add(new int[] {x, y});
+		notifyCanvas();
+	}
+	
+	public void clearData() {
+		data.clear();
+		notifyCanvas();
 	}
 }
