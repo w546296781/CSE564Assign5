@@ -3,8 +3,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
 
 public class Reporter implements MouseListener{
 	private JFileChooser jfilechooser = new JFileChooser("."); 
@@ -85,6 +88,19 @@ public class Reporter implements MouseListener{
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 						
+			}
+		};
+	}
+	
+	public ActionListener authosrsItemListener(Main mainFrame, JMenu fatherMenu) {
+		return new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+	            JDialog dialog = new JDialog(mainFrame, "Authors");
+	            JLabel label = new JLabel("Authors: Xinkai Wang, Shih-Yu Chang");
+	            dialog.setLocationRelativeTo(fatherMenu);
+	            dialog.add(label);
+	            dialog.setSize(300,150);
+	            dialog.setVisible(true);
 			}
 		};
 	}

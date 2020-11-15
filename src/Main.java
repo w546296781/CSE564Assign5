@@ -95,5 +95,9 @@ public class Main extends JFrame {
 		aboutMenu.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 12));
 		menuBar.add(aboutMenu);
 		aboutMenu.setPreferredSize(new Dimension(100, 40));
+		
+		JMenuItem authosrsItem = new JMenuItem("Authors");
+		authosrsItem.addActionListener(reporter.authosrsItemListener(this, aboutMenu));
+		aboutMenu.add(authosrsItem);
 	}
 }
