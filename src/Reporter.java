@@ -50,7 +50,8 @@ public class Reporter implements MouseListener{
 				int a = jfilechooser.showOpenDialog(null); 
 				if(a == JFileChooser.APPROVE_OPTION){
 					String filePath = jfilechooser.getSelectedFile().getPath();
-					System.out.println(filePath);
+					Repository.getInstance().openFile(filePath);
+					//System.out.println(filePath);
 				}
 			}
 		};
@@ -62,7 +63,8 @@ public class Reporter implements MouseListener{
 				int a = jfilechooser.showOpenDialog(null); 
 				if(a == JFileChooser.APPROVE_OPTION){
 					String filePath = jfilechooser.getSelectedFile().getPath();
-					System.out.println(filePath);
+					Repository.getInstance().saveFile(filePath);
+					//System.out.println(filePath);
 				}
 			}
 		};
@@ -79,7 +81,7 @@ public class Reporter implements MouseListener{
 	public ActionListener runItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				Repository.getInstance().run();
 			}
 		};
 	}
@@ -87,7 +89,7 @@ public class Reporter implements MouseListener{
 	public ActionListener stopItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-						
+				Repository.getInstance().stop();
 			}
 		};
 	}

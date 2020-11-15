@@ -27,6 +27,14 @@ public class Repository extends Observable{
 		return data;
 	}
 	
+	public void openFile(String filePath) {
+		
+	}
+	
+	public void saveFile(String filePath) {
+		
+	}
+	
 	public void addPoint(int x, int y) {
 		data.add(new int[] {x, y});
 		notifyCanvas();
@@ -35,5 +43,13 @@ public class Repository extends Observable{
 	public void clearData() {
 		data.clear();
 		notifyCanvas();
+	}
+	
+	public void run() {
+		
+	}
+	
+	public void stop() {
+		
 	}
 }
