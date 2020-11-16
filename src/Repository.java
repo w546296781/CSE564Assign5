@@ -17,10 +17,14 @@ public class Repository extends Observable{
 	private double biggestX ;
 	private double smallestY;
 	private double biggestY;
+	private boolean isRun;
+	private boolean isNew;
 	public Repository() {
 		data = new ArrayList<int[]>();
 		result = new HashMap<Integer, List>();
 		tspCountry = new ArrayList<double[]>();
+		isRun = false;
+		isNew = false;
 	}
 	
     public static Repository getInstance(){  
@@ -37,6 +41,14 @@ public class Repository extends Observable{
 	
 	public List<int[]> getData(){
 		return data;
+	}
+	
+	public boolean getIsRun() {
+		return isRun;
+	}
+	
+	public boolean getIsNew() {
+		return isNew;
 	}
 	
 	public void openFile(String filePath) {
@@ -113,10 +125,13 @@ public class Repository extends Observable{
 	}
 	
 	public void clearData() {
+		isNew = true;
+		isRun = false;
 		data.clear();
 		result.clear();
 		tspCountry.clear();
 		notifyCanvas();
+		isNew = false;
 	}
 	
 	public void addPath(int startIndex, int dest){
@@ -132,6 +147,7 @@ public class Repository extends Observable{
     }
 	
 	public void run() {
+		isRun = true;
 		for (int x=1; x<=data.size(); x++)
         {
             Thread temp= new Thread(new TspShortest(x));
