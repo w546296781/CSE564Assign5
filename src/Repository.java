@@ -51,6 +51,7 @@ public class Repository extends Observable{
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+		notifyCanvas();
 	}
 	
 	public void saveFile(String filePath) {
