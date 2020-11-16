@@ -2,20 +2,24 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Scanner;
 
 public class Repository extends Observable{
-	private static Repository instance; 
-	private List<int[]> data;
-	private List<double[]> tspCountry;
+	private static Repository instance;
+    private List<int[]> data;
+    private HashMap<Integer,List> result;
+    private List<double[]> tspCountry;
 	private double smallestX;
 	private double biggestX ;
 	private double smallestY;
 	private double biggestY;
 	public Repository() {
 		data = new ArrayList<int[]>();
+		result = new HashMap<Integer, List>();
 	}
 	
     public static Repository getInstance(){  
@@ -51,6 +55,7 @@ public class Repository extends Observable{
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+		notifyCanvas();
 	}
 	
 	public void saveFile(String filePath) {
@@ -111,11 +116,44 @@ public class Repository extends Observable{
 		notifyCanvas();
 	}
 	
+	public void addPath(int startIndex, int dest){
+        if(!result.containsKey(startIndex)){
+            List<Integer> list = Collections.synchronizedList(new ArrayList<Integer>());
+            list.add(dest);
+            result.put(startIndex,list);
+        }
+        else{
+            result.get(startIndex).add(dest);
+        }
+        notifyCanvas();
+    }
+	
 	public void run() {
-		
+		Thread temp= new Thread(new TspShortest(1));
+//        temp.setName(String.valueOf(x));
+        temp.start();
+//		for (int x=1; x<=tspCountry.size(); x++)
+//        {
+//            Thread temp= new Thread(new TspShortest(x));
+//            temp.setName(String.valueOf(x));
+//            temp.start();
+//        }
 	}
 	
 	public void stop() {
 		
 	}
+	public List<double[]> getCountry(){
+        return tspCountry;
+    }
+
+    public HashMap<Integer,List> getResult(){
+        return result;
+    }
+    
+    public double caculateDis(double endX, double startX, double endY, double startY){
+        double distance = 0.0;
+        distance = Math.sqrt(Math.pow(endX - startX,2) + Math.pow(endY - startY,2));
+        return distance;
+    }
 }
