@@ -21,8 +21,11 @@ public class Canvas extends JPanel implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
-		clear();
-		drawPoint();
+		Repository repo = Repository.getInstance();
+		if(repo.getIsNew() == true)
+			clear();
+		if(repo.getIsRun() == false)
+			drawPoint();
 		drawLine();
 	}
 	
@@ -30,13 +33,14 @@ public class Canvas extends JPanel implements Observer{
     	g2 = (Graphics2D) this.getGraphics();
         g2.setPaint(Color.white);
         g2.fillRect(0, 0, getSize().width, getSize().height);
+        drawPoint();
     }
     
 	public void drawPoint() {
 		Repository repo = Repository.getInstance();
 		List<int[]> data = repo.getData();
 		g2 = (Graphics2D) this.getGraphics();
-        g2.setPaint(Color.blue);
+		g2.setPaint(Color.blue);
 		for(int[] i:data) {
 			g2.fillOval(i[0] - 3, i[1] - 3, 6, 6);
 		}
