@@ -129,15 +129,12 @@ public class Repository extends Observable{
     }
 	
 	public void run() {
-		Thread temp= new Thread(new TspShortest(1));
-//        temp.setName(String.valueOf(x));
-        temp.start();
-//		for (int x=1; x<=tspCountry.size(); x++)
-//        {
-//            Thread temp= new Thread(new TspShortest(x));
-//            temp.setName(String.valueOf(x));
-//            temp.start();
-//        }
+		for (int x=1; x<=tspCountry.size(); x++)
+        {
+            Thread temp= new Thread(new TspShortest(x));
+            temp.setName(String.valueOf(x));
+            temp.start();
+        }
 	}
 	
 	public void stop() {
