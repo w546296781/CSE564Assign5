@@ -44,6 +44,7 @@ public class Canvas extends JPanel implements Observer{
     
     public void drawLine() {
     	Repository repo = Repository.getInstance();
+    	System.out.println(repo.getResult());
 		List<int[]> data = repo.getData();
     	HashMap<Integer,List> result = repo.getResult();
     	if(result.size() < 3)

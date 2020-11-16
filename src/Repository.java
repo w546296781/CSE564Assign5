@@ -17,6 +17,7 @@ public class Repository extends Observable{
 	private double biggestX ;
 	private double smallestY;
 	private double biggestY;
+	private boolean runOrNot = false;
 	public Repository() {
 		data = new ArrayList<int[]>();
 		result = new HashMap<Integer, List>();
@@ -128,16 +129,28 @@ public class Repository extends Observable{
         else{
             result.get(startIndex).add(dest);
         }
+        System.out.println(Thread.currentThread().isAlive());
         notifyCanvas();
     }
 	
 	public void run() {
-		for (int x=1; x<=data.size(); x++)
-        {
-            Thread temp= new Thread(new TspShortest(x));
-            temp.setName(String.valueOf(x));
-            temp.start();
-        }
+		runOrNot = true;
+		Thread temp= new Thread(new TspShortest(1));
+        temp.setName(String.valueOf(1));
+        temp.start();
+        Thread temp1= new Thread(new TspShortest(2));
+        temp1.setName(String.valueOf(2));
+        temp1.start();
+        Thread temp2= new Thread(new TspShortest(3));
+        temp2.setName(String.valueOf(3));
+        temp2.start();
+        System.out.println(temp.getState());
+//		for (int x=1; x<=data.size(); x++)
+//        {
+//            Thread temp= new Thread(new TspShortest(x));
+//            temp.setName(String.valueOf(x));
+//            temp.start();
+//        }
 	}
 	
 	public void stop() {
