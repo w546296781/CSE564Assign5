@@ -11,12 +11,12 @@ public class TspShortest implements Runnable{
     @Override
     public void run() {
         Repository repository = Repository.getInstance();
-        List<double[]> country = repository.getCountry();
-        int numberOfNodes = country.size();
+        List<int[]> data = repository.getData();
+        int numberOfNodes = data.size();
         Stack<Integer> stack = new Stack<>();
         int[] visited = new int[numberOfNodes];
-        SolutionPath = new int[country.size()+1];
-        solutionDistance = new double[country.size()];
+        SolutionPath = new int[data.size()+1];
+        solutionDistance = new double[data.size()];
         visited[startIndex-1] = 1;
         stack.push(startIndex-1);
         SolutionPath[0] = startIndex;
@@ -40,7 +40,7 @@ public class TspShortest implements Runnable{
                 if (i != element && visited[i] == 0)
                 {
                     tempDistance
-                            = repository.caculateDis(country.get(i)[0],country.get(element)[0],country.get(i)[1],country.get(element)[1]);
+                            = repository.caculateDis(data.get(i)[0],data.get(element)[0],data.get(i)[1],data.get(element)[1]);
                     if (min > tempDistance)
                     {
                         min = (int)tempDistance;
@@ -59,9 +59,9 @@ public class TspShortest implements Runnable{
                 SolutionPath[SolutionPathIndex] = dst+1;
                 SolutionPathIndex++;
                 solutionDistance[solutionDistanceIndex]
-                        = repository.caculateDis(country.get(dst)[0],country.get(last)[0],country.get(dst)[1],country.get(last)[1]);
+                        = repository.caculateDis(data.get(dst)[0],data.get(last)[0],data.get(dst)[1],data.get(last)[1]);
                 solutionDistanceIndex++;
-                disantce += repository.caculateDis(country.get(dst)[0],country.get(last)[0],country.get(dst)[1],country.get(last)[1]);
+                disantce += repository.caculateDis(data.get(dst)[0],data.get(last)[0],data.get(dst)[1],data.get(last)[1]);
                 last = dst;
                 minFlag = false;
                 try {
@@ -76,8 +76,8 @@ public class TspShortest implements Runnable{
         repository.addPath(startIndex,startIndex);
         SolutionPath[SolutionPath.length-1] = startIndex;
         solutionDistance[solutionDistance.length-1]
-                = repository.caculateDis(country.get(startIndex-1)[0],country.get(last)[0],country.get(startIndex-1)[1],country.get(last)[1]);
-        disantce += repository.caculateDis(country.get(startIndex-1)[0],country.get(last)[0],country.get(startIndex-1)[1],country.get(last)[1]);
+                = repository.caculateDis(data.get(startIndex-1)[0],data.get(last)[0],data.get(startIndex-1)[1],data.get(last)[1]);
+        disantce += repository.caculateDis(data.get(startIndex-1)[0],data.get(last)[0],data.get(startIndex-1)[1],data.get(last)[1]);
         this.SolutionPath = SolutionPath;
         this.solutionDistance = solutionDistance;
         try {

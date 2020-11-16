@@ -20,6 +20,7 @@ public class Repository extends Observable{
 	public Repository() {
 		data = new ArrayList<int[]>();
 		result = new HashMap<Integer, List>();
+		tspCountry = new ArrayList<double[]>();
 	}
 	
     public static Repository getInstance(){  
@@ -113,6 +114,8 @@ public class Repository extends Observable{
 	
 	public void clearData() {
 		data.clear();
+		result.clear();
+		tspCountry.clear();
 		notifyCanvas();
 	}
 	
@@ -129,7 +132,7 @@ public class Repository extends Observable{
     }
 	
 	public void run() {
-		for (int x=1; x<=tspCountry.size(); x++)
+		for (int x=1; x<=data.size(); x++)
         {
             Thread temp= new Thread(new TspShortest(x));
             temp.setName(String.valueOf(x));
