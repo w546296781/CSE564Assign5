@@ -50,18 +50,27 @@ public class Canvas extends JPanel implements Observer{
     	Repository repo = Repository.getInstance();
 		List<int[]> data = repo.getData();
     	HashMap<Integer,List> result = repo.getResult();
-    	if(result.size() < 3)
-    		return;
+    	List<Integer> shortestIndex = repo.getShortestIndex();
+    	System.out.println(shortestIndex.size());
     	g2 = (Graphics2D) this.getGraphics();
-        g2.setPaint(Color.green);
-        List line = result.get(3);
-        draw(g2, data, line);
-        g2.setPaint(Color.pink);
-        line = result.get(2);
-        draw(g2, data, line);
-        g2.setPaint(Color.red);
-        line = result.get(1);
-        draw(g2, data, line);
+        List line;
+    	for(int i = 0; i < shortestIndex.size(); i++) {
+    		if(i == 0) {
+    			g2.setPaint(Color.red);
+    	        line = result.get(shortestIndex.get(i));
+    	        draw(g2, data, line);
+    		}
+    		if(i == 1) {
+    			g2.setPaint(Color.pink);
+    	        line = result.get(shortestIndex.get(i));
+    	        draw(g2, data, line);
+    		}
+    		if(i == 2) {
+    	    	g2.setPaint(Color.green);
+    	        line = result.get(shortestIndex.get(i));
+    	        draw(g2, data, line);
+    		}
+    	}
     }
     
     public void draw(Graphics2D g2, List<int[]> data, List line) {

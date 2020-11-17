@@ -3,8 +3,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Scanner;
 
@@ -12,6 +16,8 @@ public class Repository extends Observable{
 	private static Repository instance;
     private List<int[]> data;
     private HashMap<Integer,List> result;
+    public HashMap<Integer,Double> distance;
+    private List<Integer> shortestIndex;
     private List<double[]> tspCountry;
 	private double smallestX;
 	private double biggestX ;
@@ -19,12 +25,16 @@ public class Repository extends Observable{
 	private double biggestY;
 	private boolean isRun;
 	private boolean isNew;
+	private Pauser pauser;
+	private Thread control;
 	public Repository() {
 		data = new ArrayList<int[]>();
 		result = new HashMap<Integer, List>();
+		distance = new HashMap<Integer,Double>();
 		tspCountry = new ArrayList<double[]>();
 		isRun = false;
 		isNew = false;
+		shortestIndex = new ArrayList<>();
 	}
 	
     public static Repository getInstance(){  
@@ -125,16 +135,18 @@ public class Repository extends Observable{
 	}
 	
 	public void clearData() {
+		pauser.pause();
 		isNew = true;
 		isRun = false;
 		data.clear();
 		result.clear();
 		tspCountry.clear();
+		shortestIndex.clear();
 		notifyCanvas();
 		isNew = false;
 	}
 	
-	public void addPath(int startIndex, int dest){
+	public synchronized void addPath(int startIndex, int dest, double distance){
         if(!result.containsKey(startIndex)){
             List<Integer> list = Collections.synchronizedList(new ArrayList<Integer>());
             list.add(dest);
@@ -143,21 +155,48 @@ public class Repository extends Observable{
         else{
             result.get(startIndex).add(dest);
         }
+        
+        if(!this.distance.containsKey(startIndex)){
+            this.distance.put(startIndex,distance);
+        }
+        else{
+            this.distance.put(startIndex, this.distance.get(startIndex)+distance);
+        }       
         notifyCanvas();
     }
 	
+	public void updateShortest(List<Integer> l) {
+		shortestIndex = l;
+	}
+	
+	public HashMap<Integer,Double> getDistance(){
+		return this.distance;
+	}
+	
+	public List<Integer> getShortestIndex(){
+		return shortestIndex;
+	}
+	
 	public void run() {
-		isRun = true;
-		for (int x=1; x<=data.size(); x++)
-        {
-            Thread temp= new Thread(new TspShortest(x));
-            temp.setName(String.valueOf(x));
-            temp.start();
-        }
+		if(isRun == false) {
+			isRun = true;
+			pauser = new Pauser();
+			for (int x=2; x<=2; x++)
+		    {
+		        Thread temp= new Thread(new TspShortest(x,pauser));
+		        temp.setName(String.valueOf(x));
+		        temp.start();
+		    }
+			control = new Thread(new RepositoryControl(pauser));
+			control.start();
+		}
+		else {
+			pauser.resume();
+		}
 	}
 	
 	public void stop() {
-		
+		pauser.pause();
 	}
 	public List<double[]> getCountry(){
         return tspCountry;
@@ -167,9 +206,11 @@ public class Repository extends Observable{
         return result;
     }
     
-    public double caculateDis(double endX, double startX, double endY, double startY){
+    public synchronized double caculateDis(double endX, double startX, double endY, double startY){
         double distance = 0.0;
         distance = Math.sqrt(Math.pow(endX - startX,2) + Math.pow(endY - startY,2));
         return distance;
     }
+    
+    
 }

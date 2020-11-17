@@ -1,89 +1,81 @@
 import java.util.List;
 import java.util.Stack;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TspShortest implements Runnable{
     private int[] SolutionPath;
     private double[] solutionDistance;
     private int startIndex;
-    public TspShortest(int s){
+    private Timer timer;
+    double min = Double.MAX_VALUE;
+    boolean minFlag = false;
+    double disantce = 0.0;
+    int last = 0;
+    List<int[]> data;
+    int numberOfNodes;
+    int[] visited;
+    int element;
+    int dst = 0, i;
+    Pauser pauser;
+    private boolean exit = false;
+    public TspShortest(int s,Pauser pauser){
         startIndex = s;
+        this.pauser = pauser;
     }
+    
     @Override
-    public void run() {
-        Repository repository = Repository.getInstance();
-        List<int[]> data = repository.getData();
-        int numberOfNodes = data.size();
-        Stack<Integer> stack = new Stack<>();
-        int[] visited = new int[numberOfNodes];
-        SolutionPath = new int[data.size()+1];
-        solutionDistance = new double[data.size()];
-        visited[startIndex-1] = 1;
-        stack.push(startIndex-1);
-        SolutionPath[0] = startIndex;
-        repository.addPath(startIndex, startIndex);
-        int element;
-        int dst = 0, i;
-        double min = Double.MAX_VALUE;
-        boolean minFlag = false;
-        double disantce = 0.0;
-        int last = 0;
-        int SolutionPathIndex = 1;
-        int solutionDistanceIndex = 0;
-        while (!stack.isEmpty())
-        {
-            element = stack.peek();
-            i = 1;
-            min = Integer.MAX_VALUE;
+    public synchronized void run() {
+    	Repository repository = Repository.getInstance();
+    	data = repository.getData();
+    	numberOfNodes = data.size();
+    	int[] visited = new int[numberOfNodes];
+    	visited[startIndex-1] = 1;
+    	last = startIndex -1;
+    	repository.addPath(startIndex, startIndex,disantce);
+    	while(!exit) {
+    		pauser.look();
+    		min = Integer.MAX_VALUE;
             double tempDistance = 0.0;
-            while (i < numberOfNodes)
-            {
-                if (i != element && visited[i] == 0)
+            if(contains(visited)) {
+            	repository.addPath(startIndex, startIndex,disantce);
+            	end();
+            	continue;
+            }
+            for(int i = 0; i < numberOfNodes; i++) {
+            	if (visited[i] == 0)
                 {
                     tempDistance
-                            = repository.caculateDis(data.get(i)[0],data.get(element)[0],data.get(i)[1],data.get(element)[1]);
+                        = repository.caculateDis(data.get(i)[0],data.get(last)[0],data.get(i)[1],data.get(last)[1]);
                     if (min > tempDistance)
                     {
                         min = (int)tempDistance;
                         dst = i;
-                        minFlag = true;
                     }
-                }
-                i++;
+                 }
             }
-
-            if (minFlag)
-            {
-                repository.addPath(startIndex,dst+1);
-                visited[dst] = 1;
-                stack.push(dst);
-                SolutionPath[SolutionPathIndex] = dst+1;
-                SolutionPathIndex++;
-                solutionDistance[solutionDistanceIndex]
-                        = repository.caculateDis(data.get(dst)[0],data.get(last)[0],data.get(dst)[1],data.get(last)[1]);
-                solutionDistanceIndex++;
-                disantce += repository.caculateDis(data.get(dst)[0],data.get(last)[0],data.get(dst)[1],data.get(last)[1]);
-                last = dst;
-                minFlag = false;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                continue;
-            }
-            stack.pop();
-        }
-        repository.addPath(startIndex,startIndex);
-        SolutionPath[SolutionPath.length-1] = startIndex;
-        solutionDistance[solutionDistance.length-1]
-                = repository.caculateDis(data.get(startIndex-1)[0],data.get(last)[0],data.get(startIndex-1)[1],data.get(last)[1]);
-        disantce += repository.caculateDis(data.get(startIndex-1)[0],data.get(last)[0],data.get(startIndex-1)[1],data.get(last)[1]);
-        this.SolutionPath = SolutionPath;
-        this.solutionDistance = solutionDistance;
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            visited[dst] = 1;
+            disantce += repository.caculateDis(data.get(dst)[0],data.get(last)[0],data.get(dst)[1],data.get(last)[1]);
+            last = dst;
+            repository.addPath(startIndex,dst+1,disantce);
+    		try {
+				Thread.sleep(1000);
+			} catch (Exception e) {
+				System.out.println(startIndex);
+			}
+    	}
+    }
+    
+    private boolean contains(int[] array) {
+    	for(int j:array){
+    		if(j==0) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    private void end() {
+    	exit = true;
     }
 }
