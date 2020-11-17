@@ -19,12 +19,15 @@ public class Repository extends Observable{
 	private double biggestY;
 	private boolean isRun;
 	private boolean isNew;
+	Thread temp;
+	Pauser pauser;
 	public Repository() {
 		data = new ArrayList<int[]>();
 		result = new HashMap<Integer, List>();
 		tspCountry = new ArrayList<double[]>();
 		isRun = false;
 		isNew = false;
+		
 	}
 	
     public static Repository getInstance(){  
@@ -68,6 +71,7 @@ public class Repository extends Observable{
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+		
 		notifyCanvas();
 	}
 	
@@ -148,16 +152,18 @@ public class Repository extends Observable{
 	
 	public void run() {
 		isRun = true;
+		pauser = new Pauser();
 		for (int x=1; x<=data.size(); x++)
         {
-            Thread temp= new Thread(new TspShortest(x));
+            temp= new Thread(new TspShortest(x,pauser));
             temp.setName(String.valueOf(x));
             temp.start();
         }
 	}
 	
 	public void stop() {
-		
+		System.out.println("stops");
+		pauser.pause();
 	}
 	public List<double[]> getCountry(){
         return tspCountry;
