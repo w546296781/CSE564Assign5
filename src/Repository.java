@@ -181,7 +181,7 @@ public class Repository extends Observable{
 		if(isRun == false) {
 			isRun = true;
 			pauser = new Pauser();
-			for (int x=2; x<=2; x++)
+			for (int x=1; x<=data.size(); x++)
 		    {
 		        Thread temp= new Thread(new TspShortest(x,pauser));
 		        temp.setName(String.valueOf(x));
