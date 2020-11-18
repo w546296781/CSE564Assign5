@@ -16,7 +16,7 @@ public class Repository extends Observable{
 	private static Repository instance;
     private List<int[]> data;
     private HashMap<Integer,List> result;
-    public HashMap<Integer,Double> distance;
+    private HashMap<Integer,Double> distance;
     private List<Integer> shortestIndex;
     private List<double[]> tspCountry;
 	private double smallestX;
