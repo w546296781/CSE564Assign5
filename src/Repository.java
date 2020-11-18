@@ -23,17 +23,11 @@ public class Repository extends Observable{
 	private double biggestX ;
 	private double smallestY;
 	private double biggestY;
-	private boolean isRun;
-	private boolean isNew;
-	private Pauser pauser;
-	private Thread control;
 	public Repository() {
 		data = new ArrayList<int[]>();
 		result = new HashMap<Integer, List>();
 		distance = new HashMap<Integer,Double>();
 		tspCountry = new ArrayList<double[]>();
-		isRun = false;
-		isNew = false;
 		shortestIndex = new ArrayList<>();
 	}
 	
@@ -51,14 +45,6 @@ public class Repository extends Observable{
 	
 	public List<int[]> getData(){
 		return data;
-	}
-	
-	public boolean getIsRun() {
-		return isRun;
-	}
-	
-	public boolean getIsNew() {
-		return isNew;
 	}
 	
 	public void openFile(String filePath) {
@@ -135,15 +121,12 @@ public class Repository extends Observable{
 	}
 	
 	public void clearData() {
-		pauser.pause();
-		isNew = true;
-		isRun = false;
 		data.clear();
 		result.clear();
 		tspCountry.clear();
 		shortestIndex.clear();
+		distance.clear();
 		notifyCanvas();
-		isNew = false;
 	}
 	
 	public synchronized void addPath(int startIndex, int dest, double distance){
@@ -177,27 +160,6 @@ public class Repository extends Observable{
 		return shortestIndex;
 	}
 	
-	public void run() {
-		if(isRun == false) {
-			isRun = true;
-			pauser = new Pauser();
-			for (int x=1; x<=data.size(); x++)
-		    {
-		        Thread temp= new Thread(new TspShortest(x,pauser));
-		        temp.setName(String.valueOf(x));
-		        temp.start();
-		    }
-			control = new Thread(new RepositoryControl(pauser));
-			control.start();
-		}
-		else {
-			pauser.resume();
-		}
-	}
-	
-	public void stop() {
-		pauser.pause();
-	}
 	public List<double[]> getCountry(){
         return tspCountry;
     }

@@ -11,7 +11,14 @@ import javax.swing.JMenu;
 
 public class Reporter implements MouseListener{
 	private JFileChooser jfilechooser = new JFileChooser("."); 
+	private boolean isRun;
+	private Pauser pauser;
+	private Thread control;
 
+	public Reporter() {
+		isRun = false;
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -73,6 +80,8 @@ public class Reporter implements MouseListener{
 	public ActionListener newItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				pauser.pause();
+				isRun = false;
 				Repository.getInstance().clearData();
 			}
 		};
@@ -81,7 +90,21 @@ public class Reporter implements MouseListener{
 	public ActionListener runItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Repository.getInstance().run();
+				if(isRun == false) {
+					isRun = true;
+					pauser = new Pauser();
+					for (int x=1; x<=Repository.getInstance().getData().size(); x++)
+				    {
+				        Thread temp= new Thread(new TspShortest(x,pauser));
+				        temp.setName(String.valueOf(x));
+				        temp.start();
+				    }
+					control = new Thread(new RepositoryControl(pauser));
+					control.start();
+				}
+				else {
+					pauser.resume();
+				}
 			}
 		};
 	}
@@ -89,7 +112,8 @@ public class Reporter implements MouseListener{
 	public ActionListener stopItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Repository.getInstance().stop();
+				isRun = false;
+				pauser.pause();
 			}
 		};
 	}

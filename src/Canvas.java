@@ -22,10 +22,8 @@ public class Canvas extends JPanel implements Observer{
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		Repository repo = Repository.getInstance();
-		if(repo.getIsNew() == true)
-			clear();
-		if(repo.getIsRun() == false)
-			drawPoint();
+		clear();
+		drawPoint();
 		drawLine();
 	}
 	
@@ -33,7 +31,6 @@ public class Canvas extends JPanel implements Observer{
     	g2 = (Graphics2D) this.getGraphics();
         g2.setPaint(Color.white);
         g2.fillRect(0, 0, getSize().width, getSize().height);
-        drawPoint();
     }
     
 	public void drawPoint() {
@@ -54,7 +51,7 @@ public class Canvas extends JPanel implements Observer{
     	System.out.println(shortestIndex);
     	g2 = (Graphics2D) this.getGraphics();
         List line;
-    	for(int i = 0; i < shortestIndex.size(); i++) {
+    	for(int i = shortestIndex.size() - 1; i >= 0 ; i--) {
     		if(i == 0) {
     			g2.setPaint(Color.red);
     	        line = result.get(shortestIndex.get(i));
