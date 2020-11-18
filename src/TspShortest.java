@@ -6,21 +6,22 @@ import java.util.TimerTask;
 public class TspShortest implements Runnable{
     private int[] SolutionPath;
     private double[] solutionDistance;
+    private List<Integer> startIndexList;
     private int startIndex;
-    private Timer timer;
-    double min = Double.MAX_VALUE;
-    boolean minFlag = false;
-    double disantce = 0.0;
-    int last = 0;
-    List<int[]> data;
-    int numberOfNodes;
-    int[] visited;
-    int element;
-    int dst = 0, i;
-    Pauser pauser;
+    private int startListIndex;
+    private double disantce = 0.0;
+    private int last = 0;
+    private List<int[]> data;
+    private int numberOfNodes;
+    private int[] visited;
+    private int dst = 0;
+    private Pauser pauser;
+    
     private boolean exit = false;
-    public TspShortest(int s,Pauser pauser){
-        startIndex = s;
+    public TspShortest(List<Integer> s,Pauser pauser){
+    	startListIndex = 0;
+    	startIndexList = s;
+    	switchStartIndex();
         this.pauser = pauser;
     }
     
@@ -29,17 +30,21 @@ public class TspShortest implements Runnable{
     	Repository repository = Repository.getInstance();
     	data = repository.getData();
     	numberOfNodes = data.size();
-    	int[] visited = new int[numberOfNodes];
-    	visited[startIndex-1] = 1;
-    	last = startIndex -1;
-    	repository.addPath(startIndex, startIndex,disantce);
+    	firstCityUpdate();
     	while(!exit) {
     		pauser.look();
-    		min = Integer.MAX_VALUE;
+    		double min = Double.MAX_VALUE;
             double tempDistance = 0.0;
             if(contains(visited)) {
-            	repository.addPath(startIndex, startIndex,disantce);
-            	end();
+            	repository.addPath(startIndex, startIndex, disantce);
+            	if(startListIndex < startIndexList.size() - 1) {
+            		startListIndex++;
+            		switchStartIndex();
+            		firstCityUpdate();
+            	}
+            	else {
+                	end();
+            	}
             	continue;
             }
             for(int i = 0; i < numberOfNodes; i++) {
@@ -66,6 +71,15 @@ public class TspShortest implements Runnable{
     	}
     }
     
+    private void firstCityUpdate() {
+    	Repository repository = Repository.getInstance();
+    	visited = new int[numberOfNodes];
+    	visited[startIndex-1] = 1;
+    	last = startIndex -1;
+    	disantce = 0.0;
+    	repository.addPath(startIndex, startIndex,disantce);
+    }
+    
     private boolean contains(int[] array) {
     	for(int j:array){
     		if(j==0) {
@@ -77,5 +91,9 @@ public class TspShortest implements Runnable{
     
     private void end() {
     	exit = true;
+    }
+    
+    private void switchStartIndex() {
+    	startIndex = startIndexList.get(startListIndex);
     }
 }

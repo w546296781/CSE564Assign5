@@ -143,7 +143,7 @@ public class Repository extends Observable{
             this.distance.put(startIndex,distance);
         }
         else{
-            this.distance.put(startIndex, this.distance.get(startIndex)+distance);
+            this.distance.put(startIndex, distance);
         }       
         notifyCanvas();
     }

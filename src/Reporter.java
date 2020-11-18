@@ -2,6 +2,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -93,12 +95,23 @@ public class Reporter implements MouseListener{
 				if(isRun == false) {
 					isRun = true;
 					pauser = new Pauser();
-					for (int x=1; x<=Repository.getInstance().getData().size(); x++)
-				    {
-				        Thread temp= new Thread(new TspShortest(x,pauser));
-				        temp.setName(String.valueOf(x));
+					int ti = 1;
+					int threadHold = (int)Math.ceil(Repository.getInstance().getData().size()/10.0);
+					List<Integer> templ;
+					for(int i = 0; i < 10; i++) {
+						templ = new ArrayList<Integer>();
+						int tempIndex = 0;
+						while(ti <= Repository.getInstance().getData().size()) {
+							templ.add(ti);
+							ti++;
+							tempIndex++;
+							if(tempIndex == threadHold) {
+								break;
+							}
+						}
+						Thread temp= new Thread(new TspShortest(templ,pauser));
 				        temp.start();
-				    }
+					}
 					control = new Thread(new RepositoryControl(pauser));
 					control.start();
 				}
