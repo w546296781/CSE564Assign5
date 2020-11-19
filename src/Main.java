@@ -11,6 +11,8 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JMenuItem;
 import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class Main extends JFrame {
 
@@ -37,15 +39,21 @@ public class Main extends JFrame {
 	 */
 	public Main() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 525, 585);
+		setBounds(100, 100, 525, 665);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		DistancePanel distancePanel = new DistancePanel();
+		distancePanel.setBackground(Color.WHITE);
+		distancePanel.setBounds(5, 40, 500, 81);
+		contentPane.add(distancePanel);
+		distancePanel.setLayout(null);
+		
 		Canvas canvas = new Canvas();
 		Reporter reporter = new Reporter();
-		canvas.setBounds(5, 42, 500, 500);
+		canvas.setBounds(5, 122, 500, 500);
 		canvas.setBackground(Color.WHITE);
 		canvas.addMouseListener(reporter);
 		contentPane.add(canvas);
@@ -53,6 +61,7 @@ public class Main extends JFrame {
 		createMenu(reporter);
 		
 		Repository.getInstance().addObserver(canvas);
+		Repository.getInstance().addObserver(distancePanel);
 	}
 	
 	private void createMenu(Reporter reporter) {
