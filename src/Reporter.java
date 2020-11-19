@@ -60,7 +60,6 @@ public class Reporter implements MouseListener{
 				if(a == JFileChooser.APPROVE_OPTION){
 					String filePath = jfilechooser.getSelectedFile().getPath();
 					Repository.getInstance().openFile(filePath);
-					//System.out.println(filePath);
 				}
 			}
 		};
@@ -73,7 +72,6 @@ public class Reporter implements MouseListener{
 				if(a == JFileChooser.APPROVE_OPTION){
 					String filePath = jfilechooser.getSelectedFile().getPath();
 					Repository.getInstance().saveFile(filePath);
-					//System.out.println(filePath);
 				}
 			}
 		};
