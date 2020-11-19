@@ -125,7 +125,6 @@ public class Reporter implements MouseListener{
 	public ActionListener stopItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				isRun = false;
 				pauser.pause();
 			}
 		};
