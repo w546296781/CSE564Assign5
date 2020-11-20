@@ -36,11 +36,11 @@ public class TspShortest implements Runnable{
     		double min = Double.MAX_VALUE;
             double tempDistance = 0.0;
             if(contains(visited)) {
-            	repository.addPath(startIndex, startIndex, disantce);
             	if(startListIndex < startIndexList.size() - 1) {
             		startListIndex++;
             		switchStartIndex();
             		firstCityUpdate();
+            		repository.firstCaculationSwitch(false);
             	}
             	else {
                 	end();

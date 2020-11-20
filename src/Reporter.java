@@ -84,6 +84,7 @@ public class Reporter implements MouseListener{
 				pauser.pause();
 				isRun = false;
 				Repository.getInstance().clearData();
+				Repository.getInstance().firstCaculationSwitch(false);
 			}
 		};
 	}
@@ -97,6 +98,7 @@ public class Reporter implements MouseListener{
 					int ti = 1;
 					int threadHold = (int)Math.ceil(Repository.getInstance().getData().size()/10.0);
 					List<Integer> templ;
+					Repository.getInstance().firstCaculationSwitch(true);
 					if(Repository.getInstance().getData().size() <= 10) {
 						for(int i = 1; i <= Repository.getInstance().getData().size(); i++) {
 							templ = new ArrayList<Integer>();

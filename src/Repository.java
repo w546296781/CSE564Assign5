@@ -23,6 +23,7 @@ public class Repository extends Observable{
 	private double biggestX ;
 	private double smallestY;
 	private double biggestY;
+	private boolean firstCaculation;
 	public Repository() {
 		data = new ArrayList<int[]>();
 		result = new HashMap<Integer, List>();
@@ -144,8 +145,18 @@ public class Repository extends Observable{
         }
         else{
             this.distance.put(startIndex, distance);
-        }       
-        notifyCanvas();
+        } 
+        
+        if(firstCaculation) {
+        	notifyCanvas();
+        }
+        else {
+        	for(int i = 0; i < shortestIndex.size(); i ++) {
+            	if(result.get(shortestIndex.get(i)).size() == data.size()) {
+            		notifyCanvas();
+            	}
+            }
+        }
     }
 	
 	public void updateShortest(List<Integer> l) {
@@ -174,5 +185,7 @@ public class Repository extends Observable{
         return distance;
     }
     
-    
+    public void firstCaculationSwitch(boolean b) {
+    	firstCaculation = b;
+    }
 }
