@@ -24,9 +24,11 @@ public class Reporter implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		int x = e.getX();
-		int y = e.getY();
-		Repository.getInstance().addPoint(x, y);
+		if(!isRun) {
+			int x = e.getX();
+			int y = e.getY();
+			Repository.getInstance().addPoint(x, y);
+		}
 	}
 
 	@Override
@@ -96,19 +98,31 @@ public class Reporter implements MouseListener{
 					int ti = 1;
 					int threadHold = (int)Math.ceil(Repository.getInstance().getData().size()/10.0);
 					List<Integer> templ;
-					for(int i = 0; i < 10; i++) {
-						templ = new ArrayList<Integer>();
-						int tempIndex = 0;
-						while(ti <= Repository.getInstance().getData().size()) {
-							templ.add(ti);
-							ti++;
-							tempIndex++;
-							if(tempIndex == threadHold) {
-								break;
+					if(Repository.getInstance().getData().size() <= 10) {
+						for(int i = 1; i <= Repository.getInstance().getData().size(); i++) {
+							templ = new ArrayList<Integer>();
+							templ.add(i);
+							Thread temp= new Thread(new TspShortest(templ,pauser));
+							temp.start();
+						}
+					}
+					else {
+						for(int i = 0; i < 10; i++) {
+							templ = new ArrayList<Integer>();
+							int tempIndex = 0;
+							while(ti <= Repository.getInstance().getData().size()) {
+								templ.add(ti);
+								ti++;
+								tempIndex++;
+								if(tempIndex == threadHold) {
+									break;
+								}
+							}
+							if(templ.size() != 0) {
+								Thread temp= new Thread(new TspShortest(templ,pauser));
+						        temp.start();
 							}
 						}
-						Thread temp= new Thread(new TspShortest(templ,pauser));
-				        temp.start();
 					}
 					control = new Thread(new RepositoryControl(pauser));
 					control.start();
