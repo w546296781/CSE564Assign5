@@ -15,7 +15,6 @@ public class Reporter implements MouseListener{
 	private JFileChooser jfilechooser = new JFileChooser("."); 
 	private boolean isRun;
 	private Pauser pauser;
-	private Thread control;
 
 	public Reporter() {
 		isRun = false;
@@ -124,7 +123,7 @@ public class Reporter implements MouseListener{
 							}
 						}
 					}
-					control = new Thread(new RepositoryControl(pauser));
+					Thread control = new Thread(new RepositoryControl(pauser));
 					control.start();
 				}
 				else {
