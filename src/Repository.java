@@ -107,12 +107,19 @@ public class Repository extends Observable{
 		data.clear();
 		double length = biggestX - smallestX;
 		double height = biggestY - smallestY;
-		int ansX = 0;
-		int ansY = 0;
-		for (double[] item:tspCountry) {
-			ansX = (int)((item[0] - smallestX) / length * 500);
-			ansY = (int)((item[1] - smallestY) / height * 500 );
-			data.add(new int[]{ansX,ansY});
+		if(length <= 500 && height <=500) {
+			for (double[] item:tspCountry) {
+				data.add(new int[]{(int)item[0],(int)item[1]});
+			}
+		}
+		else {
+			int ansX = 0;
+			int ansY = 0;
+			for (double[] item:tspCountry) {
+				ansX = (int)((item[0] - smallestX) / length * 500);
+				ansY = (int)((item[1] - smallestY) / height * 500 );
+				data.add(new int[]{ansX,ansY});
+			}
 		}
 	}
 

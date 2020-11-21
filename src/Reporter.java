@@ -81,7 +81,6 @@ public class Reporter implements MouseListener{
 	public ActionListener newItemListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				pauser.pause();
 				isRun = false;
 				Repository.getInstance().clearData();
 				Repository.getInstance().firstCaculationSwitch(false);

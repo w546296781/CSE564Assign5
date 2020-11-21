@@ -17,6 +17,9 @@ public class RepositoryControl implements Runnable{
 	public void run(){
 		Repository repo = Repository.getInstance();
         while(true) {
+        	if(repo.getData().size() == 0) {
+    			break;
+    		}
         	pauser.look();
         	if(repo.getFirstCaculation()) {
         		shortestInex = sortByValue(repo.getDistance());

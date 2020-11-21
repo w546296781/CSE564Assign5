@@ -32,6 +32,9 @@ public class TspShortest implements Runnable{
     	numberOfNodes = data.size();
     	firstCityUpdate();
     	while(!exit) {
+    		if(repository.getData().size() == 0) {
+    			break;
+    		}
     		pauser.look();
     		double min = Double.MAX_VALUE;
             double tempDistance = 0.0;
