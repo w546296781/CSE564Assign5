@@ -18,16 +18,32 @@ public class RepositoryControl implements Runnable{
 		Repository repo = Repository.getInstance();
         while(true) {
         	pauser.look();
-        	 shortestInex = sortByValue(repo.getDistance());
-             repo.updateShortest(shortestInex);
-             try {
+        	if(repo.getFirstCaculation()) {
+        		shortestInex = sortByValue(repo.getDistance());
+        		repo.updateShortest(shortestInex);
+        	}
+        	else {
+        		HashMap<Integer,Double> temp = new HashMap<Integer,Double>();
+        		for(Map.Entry<Integer, Double> entry : repo.getDistance().entrySet()) {
+        		    int key = entry.getKey();
+        		    double value = entry.getValue();
+        		    if(repo.getResult().get(key).size() == repo.getData().size()) {
+            			temp.put(key, value);
+            		}
+        		}
+        		shortestInex = sortByValue(temp);
+        		if(!shortestInex.equals(repo.getShortestIndex())) {
+        		    repo.updateShortest(shortestInex);
+    		    }
+        	}
+            try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
         }
     }
-    
+	
     private List<Integer> sortByValue(HashMap<Integer, Double> hm) 
     { 
         List<Map.Entry<Integer, Double> > list = 

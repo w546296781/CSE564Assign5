@@ -146,21 +146,11 @@ public class Repository extends Observable{
         else{
             this.distance.put(startIndex, distance);
         } 
-        
-        if(firstCaculation) {
-        	notifyCanvas();
-        }
-        else {
-        	for(int i = 0; i < shortestIndex.size(); i ++) {
-            	if(result.get(shortestIndex.get(i)).size() == data.size()) {
-            		notifyCanvas();
-            	}
-            }
-        }
     }
 	
 	public void updateShortest(List<Integer> l) {
 		shortestIndex = l;
+		notifyCanvas();
 	}
 	
 	public HashMap<Integer,Double> getDistance(){
@@ -183,6 +173,10 @@ public class Repository extends Observable{
         double distance = 0.0;
         distance = Math.sqrt(Math.pow(endX - startX,2) + Math.pow(endY - startY,2));
         return distance;
+    }
+    
+    public boolean getFirstCaculation() {
+    	return firstCaculation;
     }
     
     public void firstCaculationSwitch(boolean b) {
